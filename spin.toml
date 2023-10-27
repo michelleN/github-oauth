@@ -1,0 +1,23 @@
+spin_manifest_version = "1"
+authors = ["Michelle Dhanani <michelle@fermyon.com>"]
+description = "A Github OAuth Endpoint"
+name = "github-oauth"
+trigger = { type = "http", base = "/" }
+version = "0.1.0"
+
+
+[variables]
+client_id = { required = true }
+client_secret = { required = true }
+
+[[component]]
+id = "github-oauth"
+source = "target/wasm32-wasi/release/github_oauth.wasm"
+allowed_http_hosts = ["https://github.com", "https://api.github.com"]
+[component.trigger]
+route = "/api/sessions/oauth/github/..."
+[component.build]
+command = "cargo build --target wasm32-wasi --release"
+[component.config]
+client_id = "{{ client_id }}"
+client_secret = "{{ client_secret }}"
